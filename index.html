@@ -227,7 +227,6 @@
     };
   // This adds the data to the map
   
-
   var query = new Parse.Query(Store);
     query.find({
       success: function(results){
@@ -238,11 +237,10 @@
           store["geometry"] = results[i].get("geometry");
           store["properties"] = results[i].get("properties");
           stores.features.push(store);
-          ponMarcadores();
         }
         // Initialize the list
+        ponMarcadores();
         buildLocationList(stores);
-        console.log("stores:"+ stores.features[0]);
         // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
       },
       error: function(error){
