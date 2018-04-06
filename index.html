@@ -8,6 +8,7 @@
       <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
       <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
       <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+      <script src="https://npmcdn.com/parse/dist/parse.min.js"></script> 
 
       <style>
 
@@ -201,6 +202,11 @@
   }
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2lqbmpqazdlMDBsdnRva284cWd3bm11byJ9.V6Hg2oYJwMAxeoR9GEzkAA';
+
+  // Inicialización del servidor de Parse
+  Parse.initialize('myAppId', 'unused');
+  Parse.serverURL = 'https://recuperalopp.herokuapp.com/parse/';
+  var Store = Parse.Object.extend("Store");
 
   // This adds the map
   var map = new mapboxgl.Map({
@@ -565,7 +571,34 @@
       });
     }
   }
+    /*
+     * Esta función se encarga de guardar todos los stores, la idea es ejecutarlo
+     * la primera vez que se ejecuta la aplicación, cuando la base de datos está vacía.
+     */
 
+    function saveAllStoresFromGeoJson(){
+      stores.features.forEach(function(marker, i){
+        saveStore(marker);
+      });
+    }
+
+    /**
+      * Función encargada de guardar cada nuevo store en la base de datos.
+      */
+    function saveStore(store){
+        var storeAux = new Store();
+        storeAux.set("type", store.type);
+        storeAux.set("geometry", store.properties);
+        storeAux.set("properties", store.properties);
+        store.save(null, {
+          success: function(obj){
+            alert("Nuevo objeto añadido correctamente.");
+          },
+          error: function(obj, error){
+            alert("Error al añadir el nuevo objeto al servidor Parse. ID: " + error.id + ", message: " + error.message);
+          }
+        });
+    }
 
     </script>
   </body>
