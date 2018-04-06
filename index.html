@@ -590,7 +590,7 @@
         storeAux.set("type", store.type);
         storeAux.set("geometry", store.properties);
         storeAux.set("properties", store.properties);
-        store.save(null, {
+        storeAux.save(null, {
           success: function(obj){
             alert("Nuevo objeto añadido correctamente.");
           },
